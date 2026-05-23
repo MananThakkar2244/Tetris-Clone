@@ -109,10 +109,12 @@ class Board : Block
                     row++;
                 }
                 placePiece();
+                clearLine();
                 spawnPiece();
                 placePiece();
             }
             placePiece();
+            clearLine();
             drawBoard();
         }
     }
@@ -131,6 +133,7 @@ class Board : Block
             else
             {
                 placePiece();
+                clearLine();
                 spawnPiece();
                 placePiece();
                 drawBoard();
@@ -198,5 +201,33 @@ class Board : Block
             }
         }
         shapes[currentPiece] = newShape;
+    }
+    public void clearLine()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            bool full = true;
+            for (int j = 0; j < 10; j++)
+            {
+                if (board[i, j] == 0)
+                {
+                    full = false;
+                }
+            }
+            if (full)
+            {
+                for (int r = i; r > 0; r--)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        board[r, j] = board[r - 1, j];
+                    }
+                }
+                for (int j = 0; j < 10; j++)
+                {
+                    board[0, j] = 0;
+                }
+            }
+        }
     }
 }
