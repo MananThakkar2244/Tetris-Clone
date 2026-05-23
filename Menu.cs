@@ -43,7 +43,8 @@ class Menu
         {
             if (selectedIndex == 0)
             {
-                //Start new game
+                Board b = new Board();
+                b.drawBoard();
                 return false;
             }
             else if (selectedIndex == 1)
