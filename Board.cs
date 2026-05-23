@@ -1,38 +1,44 @@
 class Board : Block
 {
     private int[,] board = new int[20, 10];
+    private object lockObj = new object();
     Random random = new Random();
     public Board()
     {
+        Thread fallingThread = new Thread(startFalling);
         spawnPiece();
         placePiece();
         drawBoard();
+        fallingThread.Start();
         pieceMovement();
     }
     public void drawBoard()
     {
-        Console.Clear();
-        Console.WriteLine("============");
-        for (int i = 0; i < 20; i++)
+        lock (lockObj)
         {
-            Console.Write("|");
-            for (int j = 0; j < 10; j++)
+            Console.Clear();
+            Console.WriteLine("============");
+            for (int i = 0; i < 20; i++)
             {
-                if (board[i, j] == 0)
+                Console.Write("|");
+                for (int j = 0; j < 10; j++)
                 {
-                    Console.Write("-");
+                    if (board[i, j] == 0)
+                    {
+                        Console.Write("-");
+                    }
+                    else
+                    {
+                        ConsoleColor color = shapeColor[board[i, j] - 1];
+                        Console.ForegroundColor = color;
+                        Console.Write("█");
+                        Console.ResetColor();
+                    }
                 }
-                else
-                {
-                    ConsoleColor color = shapeColor[board[i, j] - 1];
-                    Console.ForegroundColor = color;
-                    Console.Write("█");
-                    Console.ResetColor();
-                }
+                Console.WriteLine("|");
             }
-            Console.WriteLine("|");
+            Console.WriteLine("============");
         }
-        Console.WriteLine("============");
     }
     public void spawnPiece()
     {
@@ -87,5 +93,47 @@ class Board : Block
                 drawBoard();
             }
         }
+    }
+    public void startFalling()
+    {
+        while (true)
+        {
+            Thread.Sleep(500);
+            clearPiece();
+            if (canMoveDown())
+            {
+                row++;
+                placePiece();
+                drawBoard();
+            }
+            else
+            {
+                placePiece();
+                spawnPiece();
+                placePiece();
+                drawBoard();
+            }
+        }
+    }
+    public bool canMoveDown()
+    {
+        for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
+        {
+            if (row + i + 1 < 20)
+            {
+                for (int j = 0; j < shapes[currentPiece].GetLength(1); j++)
+                {
+                    if (board[row + i + 1, col + j] != 0 && shapes[currentPiece][i, j] == 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        if (row + shapes[currentPiece].GetLength(0) >= 20)
+        {
+            return false;
+        }
+        return true;
     }
 }
