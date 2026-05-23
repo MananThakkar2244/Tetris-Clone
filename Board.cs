@@ -78,20 +78,21 @@ class Board : Block
         while (true)
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
-            if (key.Key == ConsoleKey.A)
+            clearPiece();
+            if (key.Key == ConsoleKey.A && canMoveLeft())
             {
-                clearPiece();
                 col--;
-                placePiece();
-                drawBoard();
             }
-            else if (key.Key == ConsoleKey.D)
+            else if (key.Key == ConsoleKey.D && canMoveRight())
             {
-                clearPiece();
                 col++;
-                placePiece();
-                drawBoard();
             }
+            else if (key.Key == ConsoleKey.W)
+            {
+                rotatePiece();
+            }
+            placePiece();
+            drawBoard();
         }
     }
     public void startFalling()
@@ -135,5 +136,46 @@ class Board : Block
             return false;
         }
         return true;
+    }
+    public bool canMoveLeft()
+    {
+        for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
+        {
+            for (int j = 0; j < shapes[currentPiece].GetLength(1); j++)
+            {
+                if (shapes[currentPiece][i, j] == 1 && (col + j - 1 < 0 || board[row + i, col + j - 1] != 0))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public bool canMoveRight()
+    {
+        for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
+        {
+            for (int j = 0; j < shapes[currentPiece].GetLength(1); j++)
+            {
+                if (shapes[currentPiece][i, j] == 1 && (col + j + 1 > 9 || board[row + i, col + j + 1] != 0))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public void rotatePiece()
+    {
+        int maxRow = shapes[currentPiece].GetLength(0) - 1;
+        int[,] newShape = new int[shapes[currentPiece].GetLength(1), shapes[currentPiece].GetLength(0)];
+        for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
+        {
+            for (int j = 0; j < shapes[currentPiece].GetLength(1); j++)
+            {
+                newShape[j, maxRow - i] = shapes[currentPiece][i, j];
+            }
+        }
+        shapes[currentPiece] = newShape;
     }
 }
