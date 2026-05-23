@@ -2,10 +2,7 @@ class Block
 {
     protected int[,] I_shape =
     {
-        {1},
-        {1},
-        {1},
-        {1}
+        {1,1,1,1},
     };
     protected int[,] O_shape =
     {

@@ -91,6 +91,27 @@ class Board : Block
             {
                 rotatePiece();
             }
+            else if (key.Key == ConsoleKey.S)
+            {
+                if (canMoveDown())
+                    row++;
+                else
+                {
+                    placePiece();
+                    spawnPiece();
+                    placePiece();
+                }
+            }
+            else if (key.Key == ConsoleKey.Spacebar)
+            {
+                while (canMoveDown())
+                {
+                    row++;
+                }
+                placePiece();
+                spawnPiece();
+                placePiece();
+            }
             placePiece();
             drawBoard();
         }
