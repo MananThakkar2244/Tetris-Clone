@@ -1,8 +1,11 @@
+using System.Diagnostics;
+
 class Board : Block
 {
     private int[,] board = new int[20, 10];
     private object lockObj = new object();
     Random random = new Random();
+    private ScoreManager score = new ScoreManager();
     public Board()
     {
         Thread fallingThread = new Thread(startFalling);
@@ -38,6 +41,8 @@ class Board : Block
                 Console.WriteLine("|");
             }
             Console.WriteLine("============");
+            Console.WriteLine("Score: " + score.score);
+            Console.WriteLine("Level: " + score.level);
         }
     }
     public void spawnPiece()
@@ -98,6 +103,9 @@ class Board : Block
                 else
                 {
                     placePiece();
+                    int lines = clearLine();
+                    score.updateLevel(lines);
+                    score.updateScore(lines);
                     spawnPiece();
                     placePiece();
                 }
@@ -109,12 +117,15 @@ class Board : Block
                     row++;
                 }
                 placePiece();
-                clearLine();
+                int lines = clearLine();
+                score.updateLevel(lines);
+                score.updateScore(lines);
                 spawnPiece();
                 placePiece();
+                drawBoard();
+                continue;
             }
             placePiece();
-            clearLine();
             drawBoard();
         }
     }
@@ -122,7 +133,7 @@ class Board : Block
     {
         while (true)
         {
-            Thread.Sleep(500);
+            Thread.Sleep(score.fallspeed);
             clearPiece();
             if (canMoveDown())
             {
@@ -133,7 +144,9 @@ class Board : Block
             else
             {
                 placePiece();
-                clearLine();
+                int lines = clearLine();
+                score.updateLevel(lines);
+                score.updateScore(lines);
                 spawnPiece();
                 placePiece();
                 drawBoard();
@@ -202,8 +215,9 @@ class Board : Block
         }
         shapes[currentPiece] = newShape;
     }
-    public void clearLine()
+    public int clearLine()
     {
+        int clearedLines = 0;
         for (int i = 0; i < 20; i++)
         {
             bool full = true;
@@ -216,6 +230,7 @@ class Board : Block
             }
             if (full)
             {
+                clearedLines++;
                 for (int r = i; r > 0; r--)
                 {
                     for (int j = 0; j < 10; j++)
@@ -229,5 +244,6 @@ class Board : Block
                 }
             }
         }
+        return clearedLines;
     }
 }
