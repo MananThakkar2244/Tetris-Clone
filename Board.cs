@@ -51,6 +51,17 @@ class Board : Block
         currentPiece = randomPiece;
         row = 0;
         col = 4;
+        for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
+        {
+            for (int j = 0; j < shapes[currentPiece].GetLength(1); j++)
+            {
+                if (board[row + i, col + j] != 0 && shapes[currentPiece][i, j] == 1)
+                {
+                    Console.WriteLine("GAME OVERRR!!!");
+                    Environment.Exit(0);
+                }
+            }
+        }
     }
     public void placePiece()
     {
