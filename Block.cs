@@ -41,6 +41,7 @@ class Block
     protected int row = 0;
     protected int col = 0;
     protected int currentPiece = 0;
+    protected int nextPiece;
     protected List<int[,]> shapes;
 
     public Block()

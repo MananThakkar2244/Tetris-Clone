@@ -9,6 +9,7 @@ class Board : Block
     public Board()
     {
         Thread fallingThread = new Thread(startFalling);
+        giveRandomPiece();
         spawnPiece();
         placePiece();
         drawBoard();
@@ -43,12 +44,31 @@ class Board : Block
             Console.WriteLine("============");
             Console.WriteLine("Score: " + score.score);
             Console.WriteLine("Level: " + score.level);
+            for (int i = 0; i < shapes[nextPiece].GetLength(0); i++)
+            {
+                for (int j = 0; j < shapes[nextPiece].GetLength(1); j++)
+                {
+                    if (shapes[nextPiece][i, j] == 1)
+                    {
+                        Console.SetCursorPosition(13 + j, 2 + i);
+                        ConsoleColor color = shapeColor[nextPiece];
+                        Console.ForegroundColor = color;
+                        Console.Write("█");
+                        Console.ResetColor();
+
+                    }
+                    else
+                    {
+                        Console.Write(" ");
+                    }
+                }
+            }
         }
     }
     public void spawnPiece()
     {
-        int randomPiece = random.Next(0, 7);
-        currentPiece = randomPiece;
+        currentPiece = nextPiece;
+        nextPiece = random.Next(0, 7);
         row = 0;
         col = 4;
         for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
@@ -256,5 +276,10 @@ class Board : Block
             }
         }
         return clearedLines;
+    }
+    public void giveRandomPiece()
+    {
+        currentPiece = random.Next(0, 7);
+        nextPiece = random.Next(0, 7);
     }
 }
