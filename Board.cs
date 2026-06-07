@@ -1,8 +1,10 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 class Board : Block
 {
     private int[,] board = new int[20, 10];
+    private int holdPiece = -1;
     private object lockObj = new object();
     Random random = new Random();
     private ScoreManager score = new ScoreManager();
@@ -44,25 +46,8 @@ class Board : Block
             Console.WriteLine("============");
             Console.WriteLine("Score: " + score.score);
             Console.WriteLine("Level: " + score.level);
-            for (int i = 0; i < shapes[nextPiece].GetLength(0); i++)
-            {
-                for (int j = 0; j < shapes[nextPiece].GetLength(1); j++)
-                {
-                    if (shapes[nextPiece][i, j] == 1)
-                    {
-                        Console.SetCursorPosition(13 + j, 2 + i);
-                        ConsoleColor color = shapeColor[nextPiece];
-                        Console.ForegroundColor = color;
-                        Console.Write("█");
-                        Console.ResetColor();
-
-                    }
-                    else
-                    {
-                        Console.Write(" ");
-                    }
-                }
-            }
+            showNextPiece();
+            showHeldPiece();
         }
     }
     public void spawnPiece()
@@ -82,6 +67,7 @@ class Board : Block
                 }
             }
         }
+        canHold = true;
     }
     public void placePiece()
     {
@@ -154,6 +140,11 @@ class Board : Block
                 spawnPiece();
                 placePiece();
                 drawBoard();
+                continue;
+            }
+            else if (key.Key == ConsoleKey.E)
+            {
+                hold();
                 continue;
             }
             placePiece();
@@ -281,5 +272,79 @@ class Board : Block
     {
         currentPiece = random.Next(0, 7);
         nextPiece = random.Next(0, 7);
+    }
+    public void hold()
+    {
+        if (canHold == false)
+        {
+            return;
+        }
+        if (holdPiece == -1)
+        {
+            holdPiece = currentPiece;
+            spawnPiece();
+            placePiece();
+            drawBoard();
+        }
+        else
+        {
+            int temp = holdPiece;
+            holdPiece = currentPiece;
+            currentPiece = temp;
+            row = 0;
+            col = 4;
+            placePiece();
+            drawBoard();
+        }
+        canHold = false;
+    }
+    public void showNextPiece()
+    {
+        Console.SetCursorPosition(13, 1);
+        Console.Write("Next Piece");
+        for (int i = 0; i < shapes[nextPiece].GetLength(0); i++)
+        {
+            for (int j = 0; j < shapes[nextPiece].GetLength(1); j++)
+            {
+                if (shapes[nextPiece][i, j] == 1)
+                {
+                    Console.SetCursorPosition(13 + j, 2 + i);
+                    ConsoleColor color = shapeColor[nextPiece];
+                    Console.ForegroundColor = color;
+                    Console.Write("█");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(" ");
+                }
+            }
+        }
+    }
+    public void showHeldPiece()
+    {
+        Console.SetCursorPosition(13, 6);
+        Console.Write("Held Piece");
+        if (holdPiece == -1)
+        {
+            Console.Write(" ");
+        }
+        else
+        {
+            for (int i = 0; i < shapes[holdPiece].GetLength(0); i++)
+            {
+                for (int j = 0; j < shapes[holdPiece].GetLength(1); j++)
+                {
+                    if (shapes[holdPiece][i, j] == 1)
+                    {
+                        Console.SetCursorPosition(13 + j, 7 + i);
+                        ConsoleColor color = shapeColor[holdPiece];
+                        Console.ForegroundColor = color;
+                        Console.Write("█");
+                        Console.ResetColor();
+                    }
+                }
+            }
+        }
     }
 }

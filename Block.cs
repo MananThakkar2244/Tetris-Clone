@@ -42,6 +42,7 @@ class Block
     protected int col = 0;
     protected int currentPiece = 0;
     protected int nextPiece;
+    protected bool canHold = true;
     protected List<int[,]> shapes;
 
     public Block()
