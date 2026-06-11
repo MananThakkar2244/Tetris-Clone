@@ -5,6 +5,7 @@ class Board : Block
 {
     private int[,] board = new int[20, 10];
     private int holdPiece = -1;
+    private int ghostRow = 0;
     private object lockObj = new object();
     Random random = new Random();
     private ScoreManager score = new ScoreManager();
@@ -48,6 +49,7 @@ class Board : Block
             Console.WriteLine("Level: " + score.level);
             showNextPiece();
             showHeldPiece();
+            showGhostPiece();
         }
     }
     public void spawnPiece()
@@ -343,6 +345,48 @@ class Board : Block
                         Console.Write("█");
                         Console.ResetColor();
                     }
+                }
+            }
+        }
+    }
+    private bool canMoveDownFrom(int testRow)
+    {
+        for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
+        {
+            if (testRow + i + 1 < 20)
+            {
+                for (int j = 0; j < shapes[currentPiece].GetLength(1); j++)
+                {
+                    if (board[testRow + i + 1, col + j] != 0 && shapes[currentPiece][i, j] == 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        if (testRow + shapes[currentPiece].GetLength(0) >= 20)
+        {
+            return false;
+        }
+        return true;
+    }
+    private void showGhostPiece()
+    {
+        clearPiece();
+        ghostRow = row;
+        while (canMoveDownFrom(ghostRow))
+        {
+            ghostRow++;
+        }
+        placePiece();
+        for (int i = 0; i < shapes[currentPiece].GetLength(0); i++)
+        {
+            for (int j = 0; j < shapes[currentPiece].GetLength(1); j++)
+            {
+                if (shapes[currentPiece][i, j] == 1)
+                {
+                    Console.SetCursorPosition(col + j + 1, ghostRow + i + 1);
+                    Console.Write("░");
                 }
             }
         }
