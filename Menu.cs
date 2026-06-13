@@ -4,6 +4,7 @@ class Menu
     private string line = "========================";
     private int selectedIndex = 0;
     private string[] options = { "New Game", "Settings", "Exit" };
+    Keybinds k = new Keybinds();
 
     public void drawMenu()
     {
@@ -43,13 +44,12 @@ class Menu
         {
             if (selectedIndex == 0)
             {
-                Board b = new Board();
+                Board b = new Board(k);
                 b.drawBoard();
                 return false;
             }
             else if (selectedIndex == 1)
             {
-                Keybinds k = new Keybinds();
                 Settings s = new Settings(k);
                 s.openSettings();
             }

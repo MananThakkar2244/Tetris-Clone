@@ -9,8 +9,10 @@ class Board : Block
     private object lockObj = new object();
     Random random = new Random();
     private ScoreManager score = new ScoreManager();
-    public Board()
+    private Keybinds playerkeybinds;
+    public Board(Keybinds keybinds)
     {
+        playerkeybinds = keybinds;
         Thread fallingThread = new Thread(startFalling);
         giveRandomPiece();
         spawnPiece();
@@ -103,19 +105,19 @@ class Board : Block
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
             clearPiece();
-            if (key.Key == ConsoleKey.A && canMoveLeft())
+            if (key.Key == playerkeybinds.MoveLeft && canMoveLeft())
             {
                 col--;
             }
-            else if (key.Key == ConsoleKey.D && canMoveRight())
+            else if (key.Key == playerkeybinds.MoveRight && canMoveRight())
             {
                 col++;
             }
-            else if (key.Key == ConsoleKey.W)
+            else if (key.Key == playerkeybinds.Rotate)
             {
                 rotatePiece();
             }
-            else if (key.Key == ConsoleKey.S)
+            else if (key.Key == playerkeybinds.SoftDrop)
             {
                 if (canMoveDown())
                     row++;
@@ -129,7 +131,7 @@ class Board : Block
                     placePiece();
                 }
             }
-            else if (key.Key == ConsoleKey.Spacebar)
+            else if (key.Key == playerkeybinds.HardDrop)
             {
                 while (canMoveDown())
                 {
@@ -144,7 +146,7 @@ class Board : Block
                 drawBoard();
                 continue;
             }
-            else if (key.Key == ConsoleKey.E)
+            else if (key.Key == playerkeybinds.Hold)
             {
                 hold();
                 continue;
