@@ -1,10 +1,23 @@
+using System.IO;
 class ScoreManager
 {
     public int score = 0;
+    public int highScore;
     public int level = 1;
     private int targetNextLevel = 5;
     private int totallines = 0;
     public int fallspeed = 500;
+    public ScoreManager()
+    {
+        if (File.Exists("HighScore.txt"))
+        {
+            highScore = int.Parse(File.ReadAllText("HighScore.txt"));
+        }
+        else
+        {
+            highScore = 0;
+        }
+    }
     public void updateLevel(int linescleared)
     {
         totallines += linescleared;
@@ -37,6 +50,28 @@ class ScoreManager
         else
         {
             score += 800;
+        }
+        if (score > highScore)
+        {
+            highScore = score;
+        }
+    }
+    public void saveHighscore()
+    {
+        if (File.Exists("HighScore.txt"))
+        {
+            if (score > int.Parse(File.ReadAllText("HighScore.txt")))
+            {
+                File.WriteAllText("HighScore.txt", score.ToString());
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            File.WriteAllText("HighScore.txt", score.ToString());
         }
     }
 }

@@ -49,6 +49,7 @@ class Board : Block
             Console.WriteLine("============");
             Console.WriteLine("Score: " + score.score);
             Console.WriteLine("Level: " + score.level);
+            Console.WriteLine("HighScore: " + score.highScore);
             showNextPiece();
             showHeldPiece();
             showGhostPiece();
@@ -67,6 +68,7 @@ class Board : Block
                 if (board[row + i, col + j] != 0 && shapes[currentPiece][i, j] == 1)
                 {
                     Console.WriteLine("GAME OVERRR!!!");
+                    score.saveHighscore();
                     Environment.Exit(0);
                 }
             }
