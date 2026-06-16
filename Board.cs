@@ -69,7 +69,6 @@ class Board : Block
                 {
                     Console.WriteLine("GAME OVERRR!!!");
                     score.saveHighscore();
-                    Console.ReadKey();
                     Environment.Exit(0);
                 }
             }
