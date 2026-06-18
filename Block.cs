@@ -1,49 +1,49 @@
 class Block
 {
-    protected int[,] I_shape =
+    private int[,] I_shape =
     {
         {1,1,1,1},
     };
-    protected int[,] O_shape =
+    private int[,] O_shape =
     {
         {1,1},
         {1,1}
     };
-    protected int[,] T_shape =
+    private int[,] T_shape =
     {
         {1,1,1},
         {0,1,0},
     };
-    protected int[,] L_shape =
+    private int[,] L_shape =
     {
         {1,0},
         {1,0},
         {1,1}
     };
-    protected int[,] J_shape =
+    private int[,] J_shape =
     {
         {0,1},
         {0,1},
         {1,1}
     };
-    protected int[,] S_shape =
+    private int[,] S_shape =
     {
         {0,1,1},
         {1,1,0}
     };
-    protected int[,] Z_shape =
+    private int[,] Z_shape =
     {
         {1,1,0},
         {0,1,1}
     };
-    protected ConsoleColor[] shapeColor = { ConsoleColor.Cyan, ConsoleColor.Yellow, ConsoleColor.Magenta,
+    public ConsoleColor[] shapeColor = { ConsoleColor.Cyan, ConsoleColor.Yellow, ConsoleColor.Magenta,
                                             ConsoleColor.Green, ConsoleColor.Red, ConsoleColor.Blue, ConsoleColor.DarkYellow};
-    protected int row = 0;
-    protected int col = 0;
-    protected int currentPiece = 0;
-    protected int nextPiece;
-    protected bool canHold = true;
-    protected List<int[,]> shapes;
+    public int row = 0;
+    public int col = 0;
+    public int currentPiece = 0;
+    public int nextPiece;
+    public bool canHold = true;
+    public List<int[,]> shapes;
 
     public Block()
     {

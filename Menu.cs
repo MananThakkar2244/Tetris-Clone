@@ -27,7 +27,6 @@ class Menu
                 break;
             }
         }
-        Console.WriteLine("You selected: " + options[selectedIndex]);
     }
     private bool inputHandler()
     {
@@ -45,7 +44,7 @@ class Menu
             if (selectedIndex == 0)
             {
                 Board b = new Board(k);
-                b.drawBoard();
+                b.startGame();
                 return false;
             }
             else if (selectedIndex == 1)
